@@ -1,7 +1,3 @@
-//
-// Created by Zelethil on 18.06.2017.
-//
-
 #ifndef MATRIX_H
 #define MATRIX_H
 
