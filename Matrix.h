@@ -104,6 +104,7 @@ public:
                     c = a + b;
                     setValue(i, j, c);
                 }
+            return *this;
         }
         else
             cout << "Number of rows and cols should be the same for both matrices." << endl;
@@ -121,22 +122,24 @@ public:
                     c = a - b;
                     setValue(i, j, c);
                 }
+            return *this;
         }
         else
             cout << "Number of rows and cols should be the same for both matrices." << endl;
     }
 
-    Matrix<T> operator*(const T& a) {
+    Matrix<T> operator*(const T& a) { // operator * (scalar multiplication)
+        T v;
         for (int i=1; i<=rows; i++)
             for (int j=1; j<=cols; j++){
-                T v = getValue(i, j);
+                v = getValue(i, j);
                 v = v * a;
                 setValue(i, j, v);
             }
-        getMatrix();
+        return *this;
     }
 
-    Matrix<T> operator*(const Matrix<T>& B) { // operator * (multiplication)
+    Matrix<T> operator*(const Matrix<T>& B) { // operator * (matrix multiplication)
         Matrix<T> C(rows, B.cols, 0);
         if (cols == B.rows) {
             T a;
@@ -151,7 +154,7 @@ public:
                         C.setValue(i, j, c);
                     }
                 }
-            C.getMatrix();
+            return C;
         }
         else
             cout << "Number of cols in the first matrix (" << cols << ") should be equal to the number of rows in the second matrix (" << B.rows << ")." << endl;

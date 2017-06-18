@@ -17,10 +17,10 @@ TEST(Matrix, TestSetValue) { // SET VALUE
     Matrix<int> m(4, 3, 0);
 
     /* MATRIX (4x3)
-     *  1    2   3
-     *  5    6   7
-     *  9   10  11
-     * 13   14  15
+     *  1   2   3
+     *  5   6   7
+     *  9  10  11
+     * 13  14  15
     */
 
     m.setValue(1, 1, 1);
@@ -125,14 +125,60 @@ TEST(Matrix, TestSub) { // OPERATOR - (subtraction)
 }
 
 TEST(Matrix, TestTranspose) {
+    Matrix<int> m(4, 3, 0);
 
+    /* MATRIX (4x3)
+     *  1   2   3
+     *  5   6   7
+     *  9  10  11
+     * 13  14  15
+    */
+
+    m.setValue(1, 1, 1);
+    m.setValue(1, 2, 2);
+    m.setValue(1, 3, 3);
+    m.setValue(2, 1, 5);
+    m.setValue(2, 2, 6);
+    m.setValue(2, 3, 7);
+    m.setValue(3, 1, 9);
+    m.setValue(3, 2, 10);
+    m.setValue(3, 3, 11);
+    m.setValue(4, 1, 13);
+    m.setValue(4, 2, 14);
+    m.setValue(4, 3, 15);
+
+    Matrix<int> t = m.transpose();
+
+    /* MATRIX (3x4)
+     *  1   5   9  13
+     *  2   6  10  14
+     *  3   7  11  15
+    */
+
+    ASSERT_FALSE(t.getRow(4));
+    ASSERT_TRUE(t.getCol(4));
+    ASSERT_EQ(1, t.getValue(1, 1));
+    ASSERT_EQ(5, t.getValue(1, 2));
+    ASSERT_EQ(9, t.getValue(1, 3));
+    ASSERT_EQ(13, t.getValue(1, 4));
+    ASSERT_EQ(2, t.getValue(2, 1));
+    ASSERT_EQ(6, t.getValue(2, 2));
+    ASSERT_EQ(10, t.getValue(2, 3));
+    ASSERT_EQ(14, t.getValue(2, 4));
+    ASSERT_EQ(3, t.getValue(3, 1));
+    ASSERT_EQ(7, t.getValue(3, 2));
+    ASSERT_EQ(11, t.getValue(3, 3));
+    ASSERT_EQ(15, t.getValue(3, 4));
 }
 
-/*TEST(Matrix, TestMult1) { // OPERATOR * (scalar multiplication)
-    Matrix<int> m(2, 2, 3);
-    cout << "SCALAR MULTIPLICATION" << endl;
-    m.getMatrix();
-    m*2;
+TEST(Matrix, TestMult1) { // OPERATOR * (scalar multiplication)
+    Matrix<int> m(2, 2, 3); // 2x2 matrix of all threes
+    m * 2; // now should be all six
+
+    ASSERT_EQ(6, m.getValue(1, 1));
+    ASSERT_EQ(6, m.getValue(1, 2));
+    ASSERT_EQ(6, m.getValue(2, 1));
+    ASSERT_EQ(6, m.getValue(2, 2));
 }
 
 TEST(Matrix, TestMult2) { // OPERATOR * (matrix multiplication)
@@ -147,5 +193,6 @@ TEST(Matrix, TestMult2) { // OPERATOR * (matrix multiplication)
     a.getMatrix();
     b.getMatrix();
 
-    Matrix<int> c = a * b;
-}*/
+    Matrix<int> c = a * b; // c should be a 1x1 matrix
+    ASSERT_EQ(50, c.getValue(1, 1));
+}
