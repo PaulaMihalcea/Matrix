@@ -1,19 +1,14 @@
-//
-// Created by Zelethil on 18.06.2017.
-//
-
 #include "gtest/gtest.h"
 
 #include "../Matrix.h"
 
-/*TEST(GameCharacter, DefaultConstructor) {
-GameCharacter c;
-ASSERT_EQ(0, c.getXPos());
-ASSERT_EQ(0, c.getXPos());
-ASSERT_FALSE(c.isFighting());
+TEST(Matrix, DefaultConstructor) {
+    Matrix<int> m(4, 3, 0);
+
+    ASSERT_EQ(0, m.getValue(3, 2)); // value at
 }
 
-
+/*
 TEST(GameCharacter, TestFightingMove) {
 GameCharacter c;
 c.setFighting(true);

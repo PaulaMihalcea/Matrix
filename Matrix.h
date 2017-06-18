@@ -33,14 +33,12 @@ public:
         return cols;
     }
 
-    bool getValue(int x, int y, T& v) const { // value getter (use only for single elements of the matrix)
+    T getValue(int x, int y) const { // value getter (use only for single elements of the matrix)
         if (x > rows || y > cols || x <= 0 || y <= 0) {
             cout << "getValue: Invalid x or y" << endl;
-            return false;
         }
-        v = data[cols*(x-1)+(y-1)];
-        cout << "Value at (" << x << ", " << y << "): " << v << "." << endl;
-        return true;
+        //cout << "Value at (" << x << ", " << y << "): " << v << "." << endl;
+        return data[cols*(x-1)+(y-1)];
     }
 
     bool setValue(int x, int y, T v){ // value setter (use only for single elements of the matrix)
@@ -94,17 +92,6 @@ public:
         }
     }
 
-    Matrix<T> operator*(const T& a) {
-        for (int i=1; i<=rows; i++)
-            for (int j=1; j<=cols; j++){
-                T v;
-                getValue_(i, j, v);
-                v = v * a;
-                setValue_(i, j, v);
-            }
-        getMatrix();
-    }
-
     Matrix<T> operator+(const Matrix<T>& B) { // operator + (sum)
         Matrix<T> C(rows, cols, 0);
         if (rows == B.rows && cols == B.cols) {
@@ -141,6 +128,17 @@ public:
         }
         else
             cout << "Number of rows and cols should be the same in both matrices." << endl;
+    }
+
+    Matrix<T> operator*(const T& a) {
+        for (int i=1; i<=rows; i++)
+            for (int j=1; j<=cols; j++){
+                T v;
+                getValue_(i, j, v);
+                v = v * a;
+                setValue_(i, j, v);
+            }
+        getMatrix();
     }
 
     Matrix<T> operator*(const Matrix<T>& B) { // operator * (multiplication)
