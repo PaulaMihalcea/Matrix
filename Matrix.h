@@ -33,25 +33,29 @@ public:
         return cols;
     }
 
-    T getValue(int x, int y) const { // value getter (use only for single elements of the matrix)
+    int getSize() const {
+        return size;
+    }
+
+    T getValue(int x, int y) const { // value getter
         if (x > rows || y > cols || x <= 0 || y <= 0) {
             cout << "getValue: Invalid x or y" << endl;
+            return -1;
         }
-        //cout << "Value at (" << x << ", " << y << "): " << v << "." << endl;
-        return data[cols*(x-1)+(y-1)];
+        else
+            return data[cols*(x-1)+(y-1)];
     }
 
-    bool setValue(int x, int y, T v){ // value setter (use only for single elements of the matrix)
+    T setValue(int x, int y, T v){ // value setter
         if (x > rows || y > cols || x <= 0 || y <= 0){
             cout << "setValue: Invalid x or y" << endl;
-            return false;
+            return 1;
         }
-        data[cols*(x-1)+(y-1)] = v;
-        cout << "Value at (" << x << ", " << y << ") set to " << v << "." << endl;
-        return true;
+        else
+            return data[cols*(x-1)+(y-1)] = v;
     }
 
-    bool getRow(int x) const {  // row getter (use only for single rows of the matrix)
+    bool getRow(int x) const {  // row getter
         if (x > rows || x <= 0) {
             cout << "getRow: Invalid row number" << endl;
             return false;
@@ -59,8 +63,7 @@ public:
         T v;
         cout << "Row " << x << ": ";
         for (int j=1; j<=cols; j++) {
-            getValue_(x, j, v);
-            cout << v << " ";
+            cout << getValue(x, j) << " ";
         }
         cout << endl;
         return true;
@@ -74,69 +77,61 @@ public:
         T v;
         cout << "Column " << y << ":" << endl;
         for (int i=1; i<=rows; i++) {
-            getValue_(i, y, v);
-            cout << v << endl;
+            cout << getValue(i, y) << endl;
         }
         return true;
     }
 
     void getMatrix() const { // matrix getter
-        cout << "Matrix:" << endl;
         T v;
         for (int i=1; i<=rows; i++) {
             for (int j=1; j<=cols; j++) {
-                getValue_(i, j, v);
-                cout << v << " ";
+                cout << getValue(i, j) << " ";
             }
             cout << endl;
         }
     }
 
     Matrix<T> operator+(const Matrix<T>& B) { // operator + (sum)
-        Matrix<T> C(rows, cols, 0);
-        if (rows == B.rows && cols == B.cols) {
+        if (this->rows == B.rows && this->cols == B.cols) {
             T a;
             T b;
             T c;
             for (int i=1; i <= rows; i++)
                 for (int j=1; j <= cols; j++) {
-                    getValue_(i, j, a);
-                    B.getValue_(i, j, b);
+                    a = getValue(i, j);
+                    b = B.getValue(i, j);
                     c = a + b;
-                    C.setValue_(i, j, c);
+                    setValue(i, j, c);
                 }
-            C.getMatrix();
         }
         else
-            cout << "Number of rows and cols should be the same in both matrices." << endl;
+            cout << "Number of rows and cols should be the same for both matrices." << endl;
     }
 
     Matrix<T> operator-(const Matrix<T>& B) { // operator + (sum)
-        Matrix<T> C(rows, cols, 0);
         if (rows == B.rows && cols == B.cols) {
             T a;
             T b;
             T c;
             for (int i=1; i <= rows; i++)
                 for (int j=1; j <= cols; j++) {
-                    getValue_(i, j, a);
-                    B.getValue_(i, j, b);
+                    a = getValue(i, j);
+                    b = B.getValue(i, j);
                     c = a - b;
-                    C.setValue_(i, j, c);
+                    setValue(i, j, c);
                 }
-            C.getMatrix();
         }
         else
-            cout << "Number of rows and cols should be the same in both matrices." << endl;
+            cout << "Number of rows and cols should be the same for both matrices." << endl;
     }
 
     Matrix<T> operator*(const T& a) {
         for (int i=1; i<=rows; i++)
             for (int j=1; j<=cols; j++){
-                T v;
-                getValue_(i, j, v);
+                T v = getValue(i, j);
                 v = v * a;
-                setValue_(i, j, v);
+                setValue(i, j, v);
             }
         getMatrix();
     }
@@ -150,10 +145,10 @@ public:
                 for (int j=1; j <= cols; j++) {
                     T c = 0;
                     for (int k=1; k<=cols; k++) {
-                        getValue_(i, k, a);
-                        B.getValue_(k, j, b);
+                        a = getValue(i, k);
+                        b = B.getValue(k, j);
                         c += a * b;
-                        C.setValue_(i, j, c);
+                        C.setValue(i, j, c);
                     }
                 }
             C.getMatrix();
@@ -166,11 +161,10 @@ public:
         Matrix<T> t(cols, rows, 0);
         for (int i=1; i<=rows; i++)
             for (int j=1; j<=cols; j++) {
-                T v;
-                getValue_(i, j, v);
-                t.setValue_(j, i, v);
+                T v = getValue(i, j);
+                t.setValue(j, i, v);
             }
-        cout << "TRANSPOSE" << endl;
+        cout << "Transpose matrix:" << endl;
         t.getMatrix();
         return t;
     }
@@ -180,22 +174,6 @@ private:
     const int cols;
     int size;
     vector<T> data;
-
-    bool getValue_(int x, int y, T& v) const { // value getter (no output)
-        if (x > rows || y > cols || x <= 0 || y <= 0) {
-            return false;
-        }
-        v = data[cols*(x-1)+(y-1)];
-        return true;
-    }
-
-    bool setValue_(int x, int y, T v){ // value setter (no output)
-        if (x > rows || y > cols || x <= 0 || y <= 0){
-            return false;
-        }
-        data[cols*(x-1)+(y-1)] = v;
-        return true;
-    }
 };
 
 #endif //MATRIX_H
