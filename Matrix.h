@@ -88,6 +88,24 @@ public:
         }
     }
 
+    Matrix<T> operator=(const Matrix<T>& B) { // operator =
+        if (this->rows == B.rows && this->cols == B.cols) {
+            Matrix<T> C(rows, cols, 0);
+            T a;
+            T b;
+            for (int i=1; i <= rows; i++)
+                for (int j=1; j <= cols; j++) {
+                    b = B.getValue(i, j);
+                    C.setValue(i, j, b);
+                }
+            return C;
+        }
+        else
+            cout << "Number of rows and cols should be the same for both matrices." << endl;
+    }
+
+
+
     Matrix<T> operator+(const Matrix<T>& B) { // operator + (sum)
         if (this->rows == B.rows && this->cols == B.cols) {
             T a;

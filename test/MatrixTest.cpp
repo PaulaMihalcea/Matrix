@@ -102,6 +102,28 @@ TEST(Matrix, GetCol) { // GET COL
     ASSERT_FALSE(m.getCol(-60));
 }
 
+TEST(Matrix, TestEqual) { // OPERATOR =
+    Matrix<int> a(2, 2, 2);
+    Matrix<int> b(2, 2, 1);
+
+    Matrix<int> c=a+b;
+
+    for (int i=1; i<=a.getRows(); i++) {
+        for (int j=1; j<=a.getCols(); j++)
+            ASSERT_EQ(3, a.getValue(i, j));
+    }
+}
+
+TEST(Matrix, TestCopy) {
+    Matrix<int> a(5, 8, 7);
+    Matrix<int> b=a;
+
+    for (int i=1; i<=b.getRows(); i++) {
+        for (int j=1; j<=b.getCols(); j++)
+            ASSERT_EQ(7, b.getValue(i, j));
+    }
+}
+
 TEST(Matrix, TestSum) { // OPERATOR + (sum)
     Matrix<int> a(2, 2, 3); // 2x2 matrix of threes
     Matrix<int> b(2, 2, 1); // 2x2 matrix of ones
