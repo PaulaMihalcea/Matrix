@@ -6,20 +6,39 @@
  */
 
 #include "gtest/gtest.h"
-
 #include "../Matrix.h"
 
-TEST(Matrix, DefaultConstructor) { // DEFAULT CONSTRUCTOR
-    Matrix<int> m(4, 3, 0); // matrix initialised to all zeros
+using namespace std;
+
+TEST(Matrix, TestDefaultConstructor) {
+    Matrix<int> m(2, 3, 0); // matrix initialised to all zeros
     cout << "Matrix: " << m << endl;
 
-    for (int i=1; i<=m.getRows(); i++) {
-        for (int j=1; j<=m.getCols(); j++)
+    for (int i = 1; i <= m.getRows(); i++) {
+        for (int j = 1; j <= m.getCols(); j++)
             ASSERT_EQ(0, m.getValue(i, j)); // value in the matrix; should be zero
+    }
+
+    try {
+        Matrix<float> n(0, 1, 0);
+    } catch (out_of_range &e) {
+        FAIL() << "Expected out_of_range" << endl;
     }
 }
 
-TEST(Matrix, TestSetValue) { // SET VALUE
+TEST(Matrix, TestGetRows) {
+    Matrix<int> m(10, 6, 0); // 10x6 matrix
+
+    ASSERT_EQ(10, m.getRows());
+}
+
+TEST(Matrix, TestGetCols) {
+    Matrix<int> m(10, 8, 0); // 10x6 matrix
+
+    ASSERT_EQ(8, m.getCols());
+}
+
+TEST(Matrix, TestSetGetValue) {
     Matrix<int> m(4, 3, 0);
 
     /* MATRIX (4x3)
@@ -42,90 +61,214 @@ TEST(Matrix, TestSetValue) { // SET VALUE
     m.setValue(4, 2, 14);
     m.setValue(4, 3, 15);
 
-    cout << "Matrix: " << endl << m << endl;
+    ASSERT_EQ(1, m.getValue(1, 1));
+    ASSERT_EQ(2, m.getValue(1, 2));
+    ASSERT_EQ(3, m.getValue(1, 3));
+    ASSERT_EQ(5, m.getValue(2, 1));
+    ASSERT_EQ(6, m.getValue(2, 2));
+    ASSERT_EQ(7, m.getValue(2, 3));
+    ASSERT_EQ(9, m.getValue(3, 1));
+    ASSERT_EQ(10, m.getValue(3, 2));
+    ASSERT_EQ(11, m.getValue(3, 3));
+    ASSERT_EQ(13, m.getValue(4, 1));
+    ASSERT_EQ(14, m.getValue(4, 2));
+    ASSERT_EQ(15, m.getValue(4, 3));
+
+    try {
+        m.setValue(4, 1, 8);
+    } catch (out_of_range &e) {
+        FAIL() << "Expected out_of_range" << endl;
+    }
+
+    try {
+        m.getValue(4, 1);
+    } catch (out_of_range &e) {
+        FAIL() << "Expected out_of_range" << endl;
+    }
 }
 
-TEST(Matrix, TestGetValue) { // GET VALUE
-    Matrix<int> m(2, 2, 1); // 2x2 matrix initialised to all ones
+TEST(Matrix, TestGetRow) {
+    Matrix<float> m(3, 2, 0);
 
-    ASSERT_EQ(1, m.getValue(1, 1)); // element 1,1
-    ASSERT_EQ(1, m.getValue(1, 2)); // element 1,2
-    ASSERT_EQ(1, m.getValue(2, 1)); // element 2,1
-    ASSERT_EQ(1, m.getValue(2, 2)); // element 2,2
-    cout << endl;
-    ASSERT_EQ(-1, m.getValue(0, 1)); // invalid row number; -1 stands for error
-    ASSERT_EQ(-1, m.getValue(5, 1)); // invalid row number
-    ASSERT_EQ(-1, m.getValue(0, 1)); // invalid col number
-    ASSERT_EQ(-1, m.getValue(1, 4)); // invalid col number
+    /* MATRIX (3x2)
+     *  1   2
+     *  5   6
+     *  9  10
+    */
+
+    m.setValue(1, 1, 1);
+    m.setValue(1, 2, 2);
+    m.setValue(2, 1, 5);
+    m.setValue(2, 2, 6);
+    m.setValue(3, 1, 9);
+    m.setValue(3, 2, 10);
+
+    Matrix<float> n = m.getRow(3);
+    ASSERT_EQ(9, n.getValue(1, 1));
+    ASSERT_EQ(10, n.getValue(1, 2));
 }
 
-TEST(Matrix, TestGetRows) { // GET ROWS
-    Matrix<int> m(10, 6, 0); // 10x6 matrix
+TEST(Matrix, TestGetCol) {
+    Matrix<float> m(3, 2, 0);
 
-    ASSERT_EQ(10, m.getRows());
+    /* MATRIX (3x2)
+     *  1   2
+     *  5   6
+     *  9  10
+    */
+
+    m.setValue(1, 1, 1);
+    m.setValue(1, 2, 2);
+    m.setValue(2, 1, 5);
+    m.setValue(2, 2, 6);
+    m.setValue(3, 1, 9);
+    m.setValue(3, 2, 10);
+
+    Matrix<float> n = m.getCol(2);
+    ASSERT_EQ(2, n.getValue(1, 1));
+    ASSERT_EQ(6, n.getValue(2, 1));
+    ASSERT_EQ(10, n.getValue(3, 1));
 }
 
-TEST(Matrix, TestGetCols) { // GET COLS
-    Matrix<int> m(10, 8, 0); // 10x6 matrix
-
-    ASSERT_EQ(8, m.getCols());
-}
-
-TEST(Matrix, TestEqual) { // OPERATOR =
+TEST(Matrix, TestAssign) {
     Matrix<int> a(2, 2, 2);
+
+    /* MATRIX (2x2)
+     *  1   2
+     *  5   6
+    */
+
+    a.setValue(1, 1, 1);
+    a.setValue(1, 2, 2);
+    a.setValue(2, 1, 5);
+    a.setValue(2, 2, 6);
+
+    Matrix<int> b = a;
+
+    ASSERT_EQ(1, b.getValue(1, 1));
+    ASSERT_EQ(2, b.getValue(1, 2));
+    ASSERT_EQ(5, b.getValue(2, 1));
+    ASSERT_EQ(6, b.getValue(2, 2));
+}
+
+TEST(Matrix, TestEqual) {
+    Matrix<int> a(2, 2, 2);
+
+    /* MATRIX (2x2)
+     *  1   2
+     *  5   6
+    */
+
+    a.setValue(1, 1, 1);
+    a.setValue(1, 2, 2);
+    a.setValue(2, 1, 5);
+    a.setValue(2, 2, 6);
+
+    Matrix<int> b = a;
+
+    bool flag_b;
+
+    flag_b = b == a;
+
+    ASSERT_EQ(true, flag_b);
+
+    Matrix<int> c(2, 2, 2);
+
+    c.setValue(1, 1, 1);
+    c.setValue(1, 2, 2);
+    c.setValue(2, 1, 5);
+    c.setValue(2, 2, 7);
+
+    bool flag_c;
+
+    flag_c = c == a;
+
+    ASSERT_EQ(false, flag_c);
+}
+
+TEST(Matrix, TestSum) {
+    Matrix<int> a(2, 2, 2);
+
+    /* MATRIX (2x2)
+     *  1   2
+     *  5   6
+    */
+
+    a.setValue(1, 1, 1);
+    a.setValue(1, 2, 2);
+    a.setValue(2, 1, 5);
+    a.setValue(2, 2, 6);
+
     Matrix<int> b(2, 2, 1);
 
-    Matrix<int> c=a+b;
+    Matrix<int> c = a + b;
 
-    for (int i=1; i<=a.getRows(); i++) {
-        for (int j=1; j<=a.getCols(); j++)
-            ASSERT_EQ(3, a.getValue(i, j));
-    }
+    /* MATRIX (2x2)
+     *  2   3
+     *  6   7
+    */
+
+    ASSERT_EQ(2, c.getValue(1, 1));
+    ASSERT_EQ(3, c.getValue(1, 2));
+    ASSERT_EQ(6, c.getValue(2, 1));
+    ASSERT_EQ(7, c.getValue(2, 2));
 }
 
-TEST(Matrix, TestCopy) {
-    Matrix<int> a(5, 8, 7);
-    Matrix<int> b=a;
+TEST(Matrix, TestSub) {
+    Matrix<int> a(2, 2, 2);
 
-    for (int i=1; i<=b.getRows(); i++) {
-        for (int j=1; j<=b.getCols(); j++)
-            ASSERT_EQ(7, b.getValue(i, j));
-    }
+    /* MATRIX (2x2)
+     *  1   2
+     *  5   6
+    */
+
+    a.setValue(1, 1, 1);
+    a.setValue(1, 2, 2);
+    a.setValue(2, 1, 5);
+    a.setValue(2, 2, 6);
+
+    Matrix<int> b(2, 2, 1);
+
+    Matrix<int> c = a - b;
+
+    /* MATRIX (2x2)
+     *  0   1
+     *  4   5
+    */
+
+    ASSERT_EQ(0, c.getValue(1, 1));
+    ASSERT_EQ(1, c.getValue(1, 2));
+    ASSERT_EQ(4, c.getValue(2, 1));
+    ASSERT_EQ(5, c.getValue(2, 2));
 }
 
-TEST(Matrix, TestSum) { // OPERATOR + (sum)
-    Matrix<int> a(2, 2, 3); // 2x2 matrix of threes
-    Matrix<int> b(2, 2, 1); // 2x2 matrix of ones
-    a+b; // a should now be all fours
+TEST(Matrix, TestMultScalar) {
+    Matrix<int> m(3, 1, 3);
 
-    for (int i=1; i<=a.getRows(); i++) {
-        for (int j=1; j<=a.getCols(); j++)
-            ASSERT_EQ(4, a.getValue(i, j));
-    }
+    /* MATRIX (3x1)
+     *  0
+     *  -3
+     *  2
+    */
+
+    m.setValue(1, 1, 0);
+    m.setValue(2, 1, -3);
+    m.setValue(3, 1, 2);
+
+    m * 2;
+
+    /* MATRIX (3x1)
+     *  0
+     *  -6
+     *  4
+    */
+
+    ASSERT_EQ(0, m.getValue(1, 1));
+    ASSERT_EQ(-6, m.getValue(2, 1));
+    ASSERT_EQ(4, m.getValue(3, 1));
 }
 
-TEST(Matrix, TestSub) { // OPERATOR - (difference)
-    Matrix<int> a(2, 2, 3); // 2x2 matrix of threes
-    Matrix<int> b(2, 2, 1); // 2x2 matrix of ones
-    a-b; // a should now be all twos
-
-    for (int i=1; i<=a.getRows(); i++) {
-        for (int j=1; j<=a.getCols(); j++)
-            ASSERT_EQ(2, a.getValue(i, j));
-    }
-}
-
-TEST(Matrix, TestMult1) { // OPERATOR * (scalar multiplication)
-    Matrix<int> m(2, 2, 3); // 2x2 matrix of all threes
-    m * 2; // now should be all six
-
-    ASSERT_EQ(6, m.getValue(1, 1));
-    ASSERT_EQ(6, m.getValue(1, 2));
-    ASSERT_EQ(6, m.getValue(2, 1));
-    ASSERT_EQ(6, m.getValue(2, 2));
-}
-
-TEST(Matrix, TestMult2) { // OPERATOR * (matrix multiplication)
+TEST(Matrix, TestMultMatrix) {
     Matrix<int> a(1, 3, 0);
     Matrix<int> b(3, 1, 0);
     a.setValue(1, 1, 1);
@@ -139,7 +282,7 @@ TEST(Matrix, TestMult2) { // OPERATOR * (matrix multiplication)
     ASSERT_EQ(50, c.getValue(1, 1));
 }
 
-TEST(Matrix, TestTranspose) { // TRANSPOSE
+TEST(Matrix, TestTranspose) {
     Matrix<int> m(4, 3, 0);
 
     /* MATRIX (4x3)
@@ -170,7 +313,6 @@ TEST(Matrix, TestTranspose) { // TRANSPOSE
      *  3   7  11  15
     */
 
-    // TODO Aggiungere getRow e getCol per righe e colonne inesistenti dopo la trasposizione
     ASSERT_EQ(1, t.getValue(1, 1));
     ASSERT_EQ(5, t.getValue(1, 2));
     ASSERT_EQ(9, t.getValue(1, 3));

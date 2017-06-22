@@ -17,18 +17,17 @@ using namespace std;
 template<class T>
 class Matrix {
 public:
-    Matrix(int r, int c, T v) throw (out_of_range) : rows(r), cols(c) { // constructor
+    Matrix(int r, int c, T v) throw(out_of_range) : rows(r), cols(c) { // constructor
         try {
-            if (rows<=0 || cols <=0) {
+            if (rows <= 0 || cols <= 0) {
                 throw out_of_range("Invalid x or y.");
-            }
-            else {
-                data.reserve(rows*cols);
-                for (int i=0; i<rows*cols; i++) {
+            } else {
+                data.reserve(rows * cols);
+                for (int i = 0; i < rows * cols; i++) {
                     data.push_back(v);
                 }
             }
-        } catch (const out_of_range& e) {
+        } catch (const out_of_range &e) {
             cerr << e.what() << endl;
         }
     }
@@ -50,8 +49,8 @@ public:
             if (x > rows || y > cols || x <= 0 || y <= 0)
                 throw out_of_range("Invalid x or y.");
             else
-                return data[cols*(x-1)+(y-1)];
-        } catch (const out_of_range& e) {
+                return data[cols * (x - 1) + (y - 1)];
+        } catch (const out_of_range &e) {
             cerr << e.what() << endl;
             exit(-1);
         }
@@ -61,10 +60,9 @@ public:
         try {
             if (x > rows || y > cols || x <= 0 || y <= 0) {
                 throw out_of_range("Invalid x or y.");
-            }
-            else
+            } else
                 data[cols * (x - 1) + (y - 1)] = v;
-        } catch (const out_of_range& e) {
+        } catch (const out_of_range &e) {
             cerr << e.what() << endl;
         }
     }
@@ -103,18 +101,18 @@ public:
         }
     }
 
-    friend ostream& operator<<(ostream &output, const Matrix<T>& m) { // operator << [cout << matrix or cout <<
+    friend ostream &operator<<(ostream &output, const Matrix<T> &m) { // operator << [cout << matrix or cout <<
         // matrix.function()]
-            for (int i = 1; i <= m.rows; i++) {
-                for (int j = 1; j <= m.cols; j++) {
-                    output << m.getValue(i, j) << " ";
-                }
-                cout << endl;
+        for (int i = 1; i <= m.rows; i++) {
+            for (int j = 1; j <= m.cols; j++) {
+                output << m.getValue(i, j) << " ";
             }
-            return output;
+            cout << endl;
+        }
+        return output;
     }
 
-    void operator=(const Matrix<T>& B) throw(out_of_range) { // operator =
+    void operator=(const Matrix<T> &B) throw(out_of_range) { // operator =
         try {
             if (this->rows == B.rows && this->cols == B.cols) {
                 T b;
@@ -130,7 +128,7 @@ public:
         };
     }
 
-    bool operator==(const Matrix<T>& B) { // operator =
+    bool operator==(const Matrix<T> &B) { // operator =
         if (this->rows != B.rows || this->cols != B.cols)
             return false;
         else
@@ -141,7 +139,7 @@ public:
         return true;
     }
 
-    Matrix<T> operator+(const Matrix<T>& B) throw(out_of_range) { // operator + (sum)
+    Matrix<T> operator+(const Matrix<T> &B) throw(out_of_range) { // operator + (sum)
         try {
             if (this->rows == B.rows && this->cols == B.cols) {
                 T a;
@@ -155,8 +153,7 @@ public:
                         setValue(i, j, c);
                     }
                 return *this;
-            }
-            else
+            } else
                 throw out_of_range("Number of rows and cols should be the same for both matrices.");
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
@@ -164,7 +161,7 @@ public:
         }
     }
 
-    Matrix<T> operator-(const Matrix<T>& B) throw(out_of_range) { // operator - (difference)
+    Matrix<T> operator-(const Matrix<T> &B) throw(out_of_range) { // operator - (difference)
         try {
             if (this->rows == B.rows && this->cols == B.cols) {
                 T a;
@@ -178,8 +175,7 @@ public:
                         setValue(i, j, c);
                     }
                 return *this;
-            }
-            else
+            } else
                 throw out_of_range("Number of rows and cols should be the same for both matrices.");
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
@@ -187,10 +183,10 @@ public:
         }
     }
 
-    Matrix<T> operator*(const T& a) { // operator * (scalar multiplication)
+    Matrix<T> operator*(const T &a) { // operator * (scalar multiplication)
         T v;
-        for (int i=1; i<=rows; i++)
-            for (int j=1; j<=cols; j++){
+        for (int i = 1; i <= rows; i++)
+            for (int j = 1; j <= cols; j++) {
                 v = getValue(i, j);
                 v = v * a;
                 setValue(i, j, v);
@@ -198,7 +194,7 @@ public:
         return *this;
     }
 
-    Matrix<T> operator*(const Matrix<T>& B) throw(out_of_range) { // operator * (matrix multiplication)
+    Matrix<T> operator*(const Matrix<T> &B) throw(out_of_range) { // operator * (matrix multiplication)
         try {
             Matrix<T> C(rows, B.cols, 0);
             if (cols == B.rows) {
@@ -226,8 +222,8 @@ public:
 
     Matrix<T> transpose() const { // transpose matrix
         Matrix<T> t(cols, rows, 0);
-        for (int i=1; i<=rows; i++)
-            for (int j=1; j<=cols; j++) {
+        for (int i = 1; i <= rows; i++)
+            for (int j = 1; j <= cols; j++) {
                 T v = getValue(i, j);
                 t.setValue(j, i, v);
             }
