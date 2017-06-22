@@ -4,8 +4,7 @@
 
 TEST(Matrix, DefaultConstructor) { // DEFAULT CONSTRUCTOR
     Matrix<int> m(4, 3, 0); // matrix initialised to all zeros
-    cout << "Matrix: " << endl;
-    m.getMatrix();
+    cout << "Matrix: " << m << endl;
 
     for (int i=1; i<=m.getRows(); i++) {
         for (int j=1; j<=m.getCols(); j++)
@@ -36,8 +35,7 @@ TEST(Matrix, TestSetValue) { // SET VALUE
     m.setValue(4, 2, 14);
     m.setValue(4, 3, 15);
 
-    cout << "Matrix: " << endl;
-    m.getMatrix();
+    cout << "Matrix: " << endl << m << endl;
 }
 
 TEST(Matrix, TestGetValue) { // GET VALUE
@@ -64,12 +62,6 @@ TEST(Matrix, TestGetCols) { // GET COLS
     Matrix<int> m(10, 8, 0); // 10x6 matrix
 
     ASSERT_EQ(8, m.getCols());
-}
-
-TEST(Matrix, GetSize) { // GET SIZE
-    Matrix<int> m(13, 7, 0); // 10x6 matrix
-
-    ASSERT_EQ(91, m.getSize());
 }
 
 TEST(Matrix, GetRow) { // GET ROW
@@ -212,8 +204,6 @@ TEST(Matrix, TestMult2) { // OPERATOR * (matrix multiplication)
     b.setValue(1, 1, 7);
     b.setValue(2, 1, 8);
     b.setValue(3, 1, 9);
-    a.getMatrix();
-    b.getMatrix();
 
     Matrix<int> c = a * b; // c should be a 1x1 matrix
     ASSERT_EQ(50, c.getValue(1, 1));

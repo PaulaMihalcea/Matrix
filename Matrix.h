@@ -10,9 +10,12 @@ template<class T>
 class Matrix {
 public:
     Matrix(int r, int c, T v) : rows(r), cols(c) { // constructor
-        size = rows*cols;
-        data.reserve(size);
-        for (int i=0; i<size; i++) {
+        if (rows <= 0)
+            rows = 1;
+        if (cols <= 0)
+            cols = 1;
+        data.reserve(rows*cols);
+        for (int i=0; i<rows*cols; i++) {
             data.push_back(v);
         }
     }
@@ -27,10 +30,6 @@ public:
 
     int getCols() const { // cols getter
         return cols;
-    }
-
-    int getSize() const {
-        return size;
     }
 
     T getValue(int x, int y) const { // value getter
@@ -78,27 +77,25 @@ public:
         return true;
     }
 
-    void getMatrix() const { // matrix getter
-        T v;
-        for (int i=1; i<=rows; i++) {
-            for (int j=1; j<=cols; j++) {
-                cout << getValue(i, j) << " ";
+    friend ostream& operator<<(ostream &output, const Matrix<T>& m) { // operator << (cout << matrix)
+        for (int i=1; i<=m.rows; i++) {
+            for (int j=1; j<=m.cols; j++) {
+                output << m.getValue(i, j) << " ";
             }
             cout << endl;
         }
+        return output;
     }
 
     Matrix<T> operator=(const Matrix<T>& B) { // operator =
         if (this->rows == B.rows && this->cols == B.cols) {
-            Matrix<T> C(rows, cols, 0);
-            T a;
             T b;
             for (int i=1; i <= rows; i++)
                 for (int j=1; j <= cols; j++) {
                     b = B.getValue(i, j);
-                    C.setValue(i, j, b);
+                    setValue(i, j, b);
                 }
-            return C;
+            return *this;
         }
         else
             cout << "Number of rows and cols should be the same for both matrices." << endl;
@@ -124,7 +121,7 @@ public:
             cout << "Number of rows and cols should be the same for both matrices." << endl;
     }
 
-    Matrix<T> operator-(const Matrix<T>& B) { // operator + (sum)
+    Matrix<T> operator-(const Matrix<T>& B) { // operator - (difference)
         if (rows == B.rows && cols == B.cols) {
             T a;
             T b;
@@ -140,6 +137,7 @@ public:
         }
         else
             cout << "Number of rows and cols should be the same for both matrices." << endl;
+        // TODO Manca return
     }
 
     Matrix<T> operator*(const T& a) { // operator * (scalar multiplication)
@@ -181,15 +179,13 @@ public:
                 T v = getValue(i, j);
                 t.setValue(j, i, v);
             }
-        cout << "Transpose matrix:" << endl;
-        t.getMatrix();
+        cout << "Transpose matrix:" << endl << t << endl;
         return t;
     }
 
 private:
-    const int rows;
-    const int cols;
-    int size;
+    int rows;
+    int cols;
     vector<T> data;
 };
 
