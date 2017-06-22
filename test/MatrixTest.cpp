@@ -64,36 +64,6 @@ TEST(Matrix, TestGetCols) { // GET COLS
     ASSERT_EQ(8, m.getCols());
 }
 
-TEST(Matrix, GetRow) { // GET ROW
-    Matrix<int> m(2, 3, 0);
-    m.setValue(1, 1, 1);
-    m.setValue(1, 2, 2);
-    m.setValue(1, 3, 3);
-    m.setValue(2, 1, 1);
-    m.setValue(2, 1, 1);
-    m.setValue(2, 1, 1);
-
-    ASSERT_TRUE(m.getRow(1));
-    ASSERT_TRUE(m.getRow(2));
-    ASSERT_FALSE(m.getRow(0));
-    ASSERT_FALSE(m.getRow(5));
-    ASSERT_FALSE(m.getRow(-60));
-}
-
-TEST(Matrix, GetCol) { // GET COL
-    Matrix<int> m(1, 3, 0);
-    m.setValue(1, 1, 1);
-    m.setValue(1, 2, 2);
-    m.setValue(1, 3, 3);
-
-    ASSERT_TRUE(m.getCol(1));
-    ASSERT_TRUE(m.getCol(2));
-    ASSERT_TRUE(m.getCol(3));
-    ASSERT_FALSE(m.getCol(0));
-    ASSERT_FALSE(m.getCol(5));
-    ASSERT_FALSE(m.getCol(-60));
-}
-
 TEST(Matrix, TestEqual) { // OPERATOR =
     Matrix<int> a(2, 2, 2);
     Matrix<int> b(2, 2, 1);
@@ -169,8 +139,7 @@ TEST(Matrix, TestTranspose) {
      *  3   7  11  15
     */
 
-    ASSERT_FALSE(t.getRow(4));
-    ASSERT_TRUE(t.getCol(4));
+    // TODO Aggiungere getRow e getCol per righe e colonne inesistenti dopo la trasposizione
     ASSERT_EQ(1, t.getValue(1, 1));
     ASSERT_EQ(5, t.getValue(1, 2));
     ASSERT_EQ(9, t.getValue(1, 3));
