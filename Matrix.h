@@ -87,7 +87,7 @@ public:
         return output;
     }
 
-    Matrix<T> operator=(const Matrix<T>& B) { // operator =
+    void operator=(const Matrix<T>& B) { // operator =
         if (this->rows == B.rows && this->cols == B.cols) {
             T b;
             for (int i=1; i <= rows; i++)
@@ -95,7 +95,6 @@ public:
                     b = B.getValue(i, j);
                     setValue(i, j, b);
                 }
-            return *this;
         }
         else
             cout << "Number of rows and cols should be the same for both matrices." << endl;

@@ -10,7 +10,7 @@
 
 int main() {
 
-    /* TODO L'operator = non deve restituire una terza matrice
+    /* DONE L'operatore = non deve restituire una terza matrice
      * DONE Levare size / usare il size del vector
      * TODO Non usare gli stessi valori nei test (no matrici di tutti x)
      * TODO Usare eccezioni per ritornare messaggi di errore in tutte le funzioni
