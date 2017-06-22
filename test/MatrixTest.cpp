@@ -104,7 +104,7 @@ TEST(Matrix, TestSum) { // OPERATOR + (sum)
     }
 }
 
-TEST(Matrix, TestSub) { // OPERATOR - (subtraction)
+TEST(Matrix, TestSub) { // OPERATOR - (difference)
     Matrix<int> a(2, 2, 3); // 2x2 matrix of threes
     Matrix<int> b(2, 2, 1); // 2x2 matrix of ones
     a-b; // a should now be all twos
@@ -115,7 +115,31 @@ TEST(Matrix, TestSub) { // OPERATOR - (subtraction)
     }
 }
 
-TEST(Matrix, TestTranspose) {
+TEST(Matrix, TestMult1) { // OPERATOR * (scalar multiplication)
+    Matrix<int> m(2, 2, 3); // 2x2 matrix of all threes
+    m * 2; // now should be all six
+
+    ASSERT_EQ(6, m.getValue(1, 1));
+    ASSERT_EQ(6, m.getValue(1, 2));
+    ASSERT_EQ(6, m.getValue(2, 1));
+    ASSERT_EQ(6, m.getValue(2, 2));
+}
+
+TEST(Matrix, TestMult2) { // OPERATOR * (matrix multiplication)
+    Matrix<int> a(1, 3, 0);
+    Matrix<int> b(3, 1, 0);
+    a.setValue(1, 1, 1);
+    a.setValue(1, 2, 2);
+    a.setValue(1, 3, 3);
+    b.setValue(1, 1, 7);
+    b.setValue(2, 1, 8);
+    b.setValue(3, 1, 9);
+
+    Matrix<int> c = a * b; // c should be a 1x1 matrix
+    ASSERT_EQ(50, c.getValue(1, 1));
+}
+
+TEST(Matrix, TestTranspose) { // TRANSPOSE
     Matrix<int> m(4, 3, 0);
 
     /* MATRIX (4x3)
@@ -159,28 +183,4 @@ TEST(Matrix, TestTranspose) {
     ASSERT_EQ(7, t.getValue(3, 2));
     ASSERT_EQ(11, t.getValue(3, 3));
     ASSERT_EQ(15, t.getValue(3, 4));
-}
-
-TEST(Matrix, TestMult1) { // OPERATOR * (scalar multiplication)
-    Matrix<int> m(2, 2, 3); // 2x2 matrix of all threes
-    m * 2; // now should be all six
-
-    ASSERT_EQ(6, m.getValue(1, 1));
-    ASSERT_EQ(6, m.getValue(1, 2));
-    ASSERT_EQ(6, m.getValue(2, 1));
-    ASSERT_EQ(6, m.getValue(2, 2));
-}
-
-TEST(Matrix, TestMult2) { // OPERATOR * (matrix multiplication)
-    Matrix<int> a(1, 3, 0);
-    Matrix<int> b(3, 1, 0);
-    a.setValue(1, 1, 1);
-    a.setValue(1, 2, 2);
-    a.setValue(1, 3, 3);
-    b.setValue(1, 1, 7);
-    b.setValue(2, 1, 8);
-    b.setValue(3, 1, 9);
-
-    Matrix<int> c = a * b; // c should be a 1x1 matrix
-    ASSERT_EQ(50, c.getValue(1, 1));
 }

@@ -130,6 +130,17 @@ public:
         };
     }
 
+    bool operator==(const Matrix<T>& B) { // operator =
+        if (this->rows != B.rows || this->cols != B.cols)
+            return false;
+        else
+            for (int i = 1; i <= rows; i++)
+                for (int j = 1; j <= cols; j++)
+                    if (getValue(i, j) != B.getValue(i, j))
+                        return false;
+        return true;
+    }
+
     Matrix<T> operator+(const Matrix<T>& B) throw(out_of_range) { // operator + (sum)
         try {
             if (this->rows == B.rows && this->cols == B.cols) {
@@ -194,7 +205,7 @@ public:
                 T a;
                 T b;
                 for (int i = 1; i <= rows; i++)
-                    for (int j = 1; j <= cols; j++) {
+                    for (int j = 1; j <= B.cols; j++) {
                         T c = 0;
                         for (int k = 1; k <= cols; k++) {
                             a = getValue(i, k);

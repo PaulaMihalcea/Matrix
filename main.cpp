@@ -28,9 +28,14 @@ int main() {
      * TODO Controllare commenti/testi vari (cleanup)
      */
 
-    Matrix<int> a(3, 3, 2);
-    Matrix<int> b(3, 3, 4);
+    Matrix<int> a(3, 1, 2);
+    Matrix<int> b(1, 3, 3);
 
+    a*b;
+    cout << a*b << endl;
+    cout << endl;
+    Matrix<int> c=a*b;
+    cout << c << endl;
 
     return 0;
 }
