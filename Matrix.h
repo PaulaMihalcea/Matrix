@@ -1,3 +1,10 @@
+/* MATRIX
+ * by Paula Mihalcea
+ *
+ * UniFi - Ingegneria Informatica
+ * Laboratorio di programmazione
+ */
+
 #ifndef MATRIX_H
 #define MATRIX_H
 
@@ -46,6 +53,7 @@ public:
                 return data[cols*(x-1)+(y-1)];
         } catch (const out_of_range& e) {
             cerr << e.what() << endl;
+            exit(-1);
         }
     }
 
@@ -74,6 +82,7 @@ public:
             }
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
+            exit(-1);
         }
     }
 
@@ -90,10 +99,12 @@ public:
             }
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
+            exit(-1);
         }
     }
 
-    friend ostream& operator<<(ostream &output, const Matrix<T>& m) throw(out_of_range) { // operator << (cout << matrix)
+    friend ostream& operator<<(ostream &output, const Matrix<T>& m) { // operator << [cout << matrix or cout <<
+        // matrix.function()]
             for (int i = 1; i <= m.rows; i++) {
                 for (int j = 1; j <= m.cols; j++) {
                     output << m.getValue(i, j) << " ";
@@ -138,6 +149,7 @@ public:
                 throw out_of_range("Number of rows and cols should be the same for both matrices.");
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
+            exit(-1);
         }
     }
 
@@ -160,6 +172,7 @@ public:
                 throw out_of_range("Number of rows and cols should be the same for both matrices.");
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
+            exit(-1);
         }
     }
 
@@ -175,24 +188,29 @@ public:
     }
 
     Matrix<T> operator*(const Matrix<T>& B) throw(out_of_range) { // operator * (matrix multiplication)
-        Matrix<T> C(rows, B.cols, 0);
-        if (cols == B.rows) {
-            T a;
-            T b;
-            for (int i=1; i <= rows; i++)
-                for (int j=1; j <= cols; j++) {
-                    T c = 0;
-                    for (int k=1; k<=cols; k++) {
-                        a = getValue(i, k);
-                        b = B.getValue(k, j);
-                        c += a * b;
-                        C.setValue(i, j, c);
+        try {
+            Matrix<T> C(rows, B.cols, 0);
+            if (cols == B.rows) {
+                T a;
+                T b;
+                for (int i = 1; i <= rows; i++)
+                    for (int j = 1; j <= cols; j++) {
+                        T c = 0;
+                        for (int k = 1; k <= cols; k++) {
+                            a = getValue(i, k);
+                            b = B.getValue(k, j);
+                            c += a * b;
+                            C.setValue(i, j, c);
+                        }
                     }
-                }
-            return C;
+                return C;
+            } else
+                throw out_of_range(
+                        "Number of cols in the first matrix should be equal to the number of rows in the second matrix.");
+        } catch (out_of_range &e) {
+            cerr << e.what() << endl;
+            exit(-1);
         }
-        else
-            cout << "Number of cols in the first matrix (" << cols << ") should be equal to the number of rows in the second matrix (" << B.rows << ")." << endl;
     }
 
     Matrix<T> transpose() const { // transpose matrix

@@ -1,3 +1,10 @@
+/* MATRIX
+ * by Paula Mihalcea
+ *
+ * UniFi - Ingegneria Informatica
+ * Laboratorio di programmazione
+ */
+
 #include "gtest/gtest.h"
 
 #include "../Matrix.h"
