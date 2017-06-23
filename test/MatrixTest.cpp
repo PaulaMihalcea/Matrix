@@ -12,18 +12,16 @@ using namespace std;
 
 TEST(Matrix, TestDefaultConstructor) {
     Matrix<int> m(2, 3, 0); // matrix initialised to all zeros
-    cout << "Matrix: " << m << endl;
 
     for (int i = 1; i <= m.getRows(); i++) {
         for (int j = 1; j <= m.getCols(); j++)
             ASSERT_EQ(0, m.getValue(i, j)); // value in the matrix; should be zero
     }
 
-    try {
-        Matrix<float> n(0, 1, 0);
-    } catch (out_of_range &e) {
-        FAIL() << "Expected out_of_range" << endl;
-    }
+    Matrix<float> a(0, 1, 0);
+    Matrix<float> b(1, 0, 0);
+    Matrix<float> c(-57, 1, 0);
+    Matrix<float> d(1, -96, 0);
 }
 
 TEST(Matrix, TestGetRows) {
@@ -74,17 +72,19 @@ TEST(Matrix, TestSetGetValue) {
     ASSERT_EQ(14, m.getValue(4, 2));
     ASSERT_EQ(15, m.getValue(4, 3));
 
-    try {
-        m.setValue(4, 1, 8);
-    } catch (out_of_range &e) {
-        FAIL() << "Expected out_of_range" << endl;
-    }
+    ASSERT_DEATH(m.setValue(1, 6, 8), "Invalid x or y.");
+    ASSERT_DEATH(m.setValue(0, 1, 8), "Invalid x or y.");
+    ASSERT_DEATH(m.setValue(1, 0, 8), "Invalid x or y.");
+    ASSERT_DEATH(m.setValue(-36, 1, 8), "Invalid x or y.");
+    ASSERT_DEATH(m.setValue(2, -52, 8), "Invalid x or y.");
+    ASSERT_DEATH(m.setValue(0, 0, 8), "Invalid x or y.");
 
-    try {
-        m.getValue(4, 1);
-    } catch (out_of_range &e) {
-        FAIL() << "Expected out_of_range" << endl;
-    }
+    ASSERT_DEATH(m.getValue(1, 6), "Invalid x or y.");
+    ASSERT_DEATH(m.getValue(0, 1), "Invalid x or y.");
+    ASSERT_DEATH(m.getValue(1, 0), "Invalid x or y.");
+    ASSERT_DEATH(m.getValue(-36, 1), "Invalid x or y.");
+    ASSERT_DEATH(m.getValue(2, -52), "Invalid x or y.");
+    ASSERT_DEATH(m.getValue(0, 0), "Invalid x or y.");
 }
 
 TEST(Matrix, TestGetRow) {
@@ -106,6 +106,11 @@ TEST(Matrix, TestGetRow) {
     Matrix<float> n = m.getRow(3);
     ASSERT_EQ(9, n.getValue(1, 1));
     ASSERT_EQ(10, n.getValue(1, 2));
+
+    ASSERT_DEATH(n.getValue(2, 1), "Invalid x or y.");
+    ASSERT_DEATH(n.getValue(0, 9), "Invalid x or y.");
+    ASSERT_DEATH(n.getValue(1, 3), "Invalid x or y.");
+    ASSERT_DEATH(n.getValue(1, -25), "Invalid x or y.");
 }
 
 TEST(Matrix, TestGetCol) {
@@ -128,6 +133,11 @@ TEST(Matrix, TestGetCol) {
     ASSERT_EQ(2, n.getValue(1, 1));
     ASSERT_EQ(6, n.getValue(2, 1));
     ASSERT_EQ(10, n.getValue(3, 1));
+
+    ASSERT_DEATH(n.getValue(2, 0), "Invalid x or y.");
+    ASSERT_DEATH(n.getValue(1, -14), "Invalid x or y.");
+    ASSERT_DEATH(n.getValue(-5, 1), "Invalid x or y.");
+    ASSERT_DEATH(n.getValue(0, 1), "Invalid x or y.");
 }
 
 TEST(Matrix, TestAssign) {
@@ -149,6 +159,10 @@ TEST(Matrix, TestAssign) {
     ASSERT_EQ(2, b.getValue(1, 2));
     ASSERT_EQ(5, b.getValue(2, 1));
     ASSERT_EQ(6, b.getValue(2, 2));
+
+    Matrix<int>c(1, 2, 2);
+
+    ASSERT_DEATH(c = a, "Number of rows and cols should be the same for both matrices.");
 }
 
 TEST(Matrix, TestEqual) {
@@ -212,6 +226,10 @@ TEST(Matrix, TestSum) {
     ASSERT_EQ(3, c.getValue(1, 2));
     ASSERT_EQ(6, c.getValue(2, 1));
     ASSERT_EQ(7, c.getValue(2, 2));
+
+    Matrix<int> d(3, 3, 1);
+
+    ASSERT_DEATH(d + a, "Number of rows and cols should be the same for both matrices.");
 }
 
 TEST(Matrix, TestSub) {
@@ -240,6 +258,10 @@ TEST(Matrix, TestSub) {
     ASSERT_EQ(1, c.getValue(1, 2));
     ASSERT_EQ(4, c.getValue(2, 1));
     ASSERT_EQ(5, c.getValue(2, 2));
+
+    Matrix<int> d(3, 3, 1);
+
+    ASSERT_DEATH(d - a, "Number of rows and cols should be the same for both matrices.");
 }
 
 TEST(Matrix, TestMultScalar) {
@@ -280,6 +302,11 @@ TEST(Matrix, TestMultMatrix) {
 
     Matrix<int> c = a * b; // c should be a 1x1 matrix
     ASSERT_EQ(50, c.getValue(1, 1));
+
+    Matrix<int> d(1, 2, 1);
+
+    ASSERT_DEATH(d * a, "Number of cols in the first matrix should be equal to the number of rows in the second matrix"
+            ".");
 }
 
 TEST(Matrix, TestTranspose) {
@@ -325,4 +352,11 @@ TEST(Matrix, TestTranspose) {
     ASSERT_EQ(7, t.getValue(3, 2));
     ASSERT_EQ(11, t.getValue(3, 3));
     ASSERT_EQ(15, t.getValue(3, 4));
+
+    ASSERT_DEATH(t.getValue(4, 0), "Invalid x or y.");
+    ASSERT_DEATH(t.getValue(4, 1), "Invalid x or y.");
+    ASSERT_DEATH(t.getValue(1, -14), "Invalid x or y.");
+    ASSERT_DEATH(t.getValue(1, 5), "Invalid x or y.");
+    ASSERT_DEATH(t.getValue(0, 1), "Invalid x or y.");
+    ASSERT_DEATH(t.getValue(1, 0), "Invalid x or y.");
 }

@@ -64,6 +64,7 @@ public:
                 data[cols * (x - 1) + (y - 1)] = v;
         } catch (const out_of_range &e) {
             cerr << e.what() << endl;
+            exit(-1);
         }
     }
 
@@ -125,6 +126,7 @@ public:
                 throw out_of_range("Number of rows and cols should be the same for both matrices.");
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
+            exit(-1);
         };
     }
 
@@ -227,7 +229,6 @@ public:
                 T v = getValue(i, j);
                 t.setValue(j, i, v);
             }
-        cout << "Transpose matrix:" << endl << t << endl;
         return t;
     }
 
