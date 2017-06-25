@@ -64,7 +64,6 @@ public:
                 data[cols * (x - 1) + (y - 1)] = v;
         } catch (const out_of_range &e) {
             cerr << e.what() << endl;
-            exit(-1);
         }
     }
 
@@ -80,8 +79,9 @@ public:
                 return m;
             }
         } catch (out_of_range &e) {
-            cerr << e.what() << endl;
-            exit(-1);
+            cerr << e.what();
+            cout << "Matrix is:" << endl;
+            return *this;
         }
     }
 
@@ -98,7 +98,8 @@ public:
             }
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
-            exit(-1);
+            cout << "Matrix is:" << endl;
+            return *this;
         }
     }
 
@@ -126,7 +127,6 @@ public:
                 throw out_of_range("Number of rows and cols should be the same for both matrices.");
         } catch (out_of_range &e) {
             cerr << e.what() << endl;
-            exit(-1);
         };
     }
 
