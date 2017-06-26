@@ -18,10 +18,22 @@ TEST(Matrix, TestDefaultConstructor) {
             ASSERT_EQ(0, m.getValue(i, j)); // value in the matrix; should be zero
     }
 
-    Matrix<float> a(0, 1, 0);
-    Matrix<float> b(1, 0, 0);
-    Matrix<float> c(-57, 1, 0);
-    Matrix<float> d(1, -96, 0);
+    try {
+        Matrix<float> a(0, 1, 0);
+        Matrix<int> b(-1, 3, 5);
+        Matrix<float> c(3, -65, 3);
+        Matrix<float> d(2, 0, 1);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+
+    ASSERT_THROW(Matrix<int> b(-1, 3, 5), out_of_range);
+    ASSERT_THROW(Matrix<float> a(0, 1, 0), out_of_range);
+    ASSERT_THROW(Matrix<float> c(3, -65, 3), out_of_range);
+    ASSERT_THROW(Matrix<float> d(2, 0, 1), out_of_range);
+
 }
 
 TEST(Matrix, TestGetRows) {
@@ -59,6 +71,53 @@ TEST(Matrix, TestSetGetValue) {
     m.setValue(4, 2, 14);
     m.setValue(4, 3, 15);
 
+    try {
+        m.setValue(4, 6, 5);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.setValue(0, 1, 5);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;;
+    }
+
+    try {
+        m.setValue(5, 1, 5);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.setValue(2, 67, 5);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.setValue(-5, 1, 6);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.setValue(1, 0, 6);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    ASSERT_THROW(m.setValue(4, 6, 5), out_of_range);
+    ASSERT_THROW(m.setValue(2, 67, 5), out_of_range);
+    ASSERT_THROW(m.setValue(-5, 1, 6), out_of_range);
+    ASSERT_THROW(m.setValue(1, 0, 6), out_of_range);
+
     ASSERT_EQ(1, m.getValue(1, 1));
     ASSERT_EQ(2, m.getValue(1, 2));
     ASSERT_EQ(3, m.getValue(1, 3));
@@ -72,19 +131,52 @@ TEST(Matrix, TestSetGetValue) {
     ASSERT_EQ(14, m.getValue(4, 2));
     ASSERT_EQ(15, m.getValue(4, 3));
 
-    ASSERT_DEATH(m.setValue(1, 6, 8), "Invalid x or y.");
-    ASSERT_DEATH(m.setValue(0, 1, 8), "Invalid x or y.");
-    ASSERT_DEATH(m.setValue(1, 0, 8), "Invalid x or y.");
-    ASSERT_DEATH(m.setValue(-36, 1, 8), "Invalid x or y.");
-    ASSERT_DEATH(m.setValue(2, -52, 8), "Invalid x or y.");
-    ASSERT_DEATH(m.setValue(0, 0, 8), "Invalid x or y.");
+    try {
+        m.getValue(4, 6);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
 
-    ASSERT_DEATH(m.getValue(1, 6), "Invalid x or y.");
-    ASSERT_DEATH(m.getValue(0, 1), "Invalid x or y.");
-    ASSERT_DEATH(m.getValue(1, 0), "Invalid x or y.");
-    ASSERT_DEATH(m.getValue(-36, 1), "Invalid x or y.");
-    ASSERT_DEATH(m.getValue(2, -52), "Invalid x or y.");
-    ASSERT_DEATH(m.getValue(0, 0), "Invalid x or y.");
+    try {
+        m.getValue(0, 1);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getValue(5, 1);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getValue(2, 67);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getValue(-5, 1);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getValue(1, 0);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    ASSERT_THROW(m.getValue(4, 6), out_of_range);
+    ASSERT_THROW(m.getValue(2, 67), out_of_range);
+    ASSERT_THROW(m.getValue(-5, 1), out_of_range);
+    ASSERT_THROW(m.getValue(1, 0), out_of_range);
 }
 
 TEST(Matrix, TestGetRow) {
@@ -107,10 +199,30 @@ TEST(Matrix, TestGetRow) {
     ASSERT_EQ(9, n.getValue(1, 1));
     ASSERT_EQ(10, n.getValue(1, 2));
 
-    ASSERT_DEATH(n.getValue(2, 1), "Invalid x or y.");
-    ASSERT_DEATH(n.getValue(0, 9), "Invalid x or y.");
-    ASSERT_DEATH(n.getValue(1, 3), "Invalid x or y.");
-    ASSERT_DEATH(n.getValue(1, -25), "Invalid x or y.");
+    try {
+        m.getRow(-5);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getRow(0);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getRow(4);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    ASSERT_THROW(m.getRow(-6), out_of_range);
+    ASSERT_THROW(m.getRow(0), out_of_range);
+    ASSERT_THROW(m.getRow(10), out_of_range);
 }
 
 TEST(Matrix, TestGetCol) {
@@ -134,10 +246,30 @@ TEST(Matrix, TestGetCol) {
     ASSERT_EQ(6, n.getValue(2, 1));
     ASSERT_EQ(10, n.getValue(3, 1));
 
-    ASSERT_DEATH(n.getValue(2, 0), "Invalid x or y.");
-    ASSERT_DEATH(n.getValue(1, -14), "Invalid x or y.");
-    ASSERT_DEATH(n.getValue(-5, 1), "Invalid x or y.");
-    ASSERT_DEATH(n.getValue(0, 1), "Invalid x or y.");
+    try {
+        m.getCol(-5);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getCol(0);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    try {
+        m.getCol(3);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    ASSERT_THROW(m.getCol(-6), out_of_range);
+    ASSERT_THROW(m.getCol(0), out_of_range);
+    ASSERT_THROW(m.getCol(10), out_of_range);
 }
 
 TEST(Matrix, TestAssign) {
@@ -160,9 +292,16 @@ TEST(Matrix, TestAssign) {
     ASSERT_EQ(5, b.getValue(2, 1));
     ASSERT_EQ(6, b.getValue(2, 2));
 
-    Matrix<int>c(1, 2, 2);
+    Matrix<int> c(1, 2, 2);
 
-    ASSERT_DEATH(c = a, "Number of rows and cols should be the same for both matrices.");
+    try {
+        c = a;
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    ASSERT_THROW(c = a, out_of_range);
 }
 
 TEST(Matrix, TestEqual) {
@@ -227,9 +366,16 @@ TEST(Matrix, TestSum) {
     ASSERT_EQ(6, c.getValue(2, 1));
     ASSERT_EQ(7, c.getValue(2, 2));
 
-    Matrix<int> d(3, 3, 1);
+    Matrix<int> d(1, 2, 0);
 
-    ASSERT_DEATH(d + a, "Number of rows and cols should be the same for both matrices.");
+    try {
+        d + c;
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    ASSERT_THROW(c + d, out_of_range);
 }
 
 TEST(Matrix, TestSub) {
@@ -259,9 +405,16 @@ TEST(Matrix, TestSub) {
     ASSERT_EQ(4, c.getValue(2, 1));
     ASSERT_EQ(5, c.getValue(2, 2));
 
-    Matrix<int> d(3, 3, 1);
+    Matrix<int> d(1, 2, 0);
 
-    ASSERT_DEATH(d - a, "Number of rows and cols should be the same for both matrices.");
+    try {
+        d - c;
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();
+    }
+
+    ASSERT_THROW(c - d, out_of_range);
 }
 
 TEST(Matrix, TestMultScalar) {
@@ -303,10 +456,25 @@ TEST(Matrix, TestMultMatrix) {
     Matrix<int> c = a * b; // c should be a 1x1 matrix
     ASSERT_EQ(50, c.getValue(1, 1));
 
-    Matrix<int> d(1, 2, 1);
+    try {
+        c.getValue(2, 1);
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();
+    }
 
-    ASSERT_DEATH(d * a, "Number of cols in the first matrix should be equal to the number of rows in the second matrix"
-            ".");
+    ASSERT_THROW(c.getValue(2, 1), out_of_range);
+
+    Matrix<int> d(1, 5, 3);
+
+    try {
+        d * c;
+    } catch (out_of_range &e) {
+        cerr << e.what() << endl;
+        SUCCEED();;
+    }
+
+    ASSERT_THROW(d * c, out_of_range);
 }
 
 TEST(Matrix, TestTranspose) {
@@ -352,11 +520,4 @@ TEST(Matrix, TestTranspose) {
     ASSERT_EQ(7, t.getValue(3, 2));
     ASSERT_EQ(11, t.getValue(3, 3));
     ASSERT_EQ(15, t.getValue(3, 4));
-
-    ASSERT_DEATH(t.getValue(4, 0), "Invalid x or y.");
-    ASSERT_DEATH(t.getValue(4, 1), "Invalid x or y.");
-    ASSERT_DEATH(t.getValue(1, -14), "Invalid x or y.");
-    ASSERT_DEATH(t.getValue(1, 5), "Invalid x or y.");
-    ASSERT_DEATH(t.getValue(0, 1), "Invalid x or y.");
-    ASSERT_DEATH(t.getValue(1, 0), "Invalid x or y.");
 }
